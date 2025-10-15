@@ -12,10 +12,10 @@ A loan originates at a particular branch and can be held by one or more customer
 ## Project Overview
 
 ### PHASES 1 & 2
-- **Database Design and Implementation
-- **Advanced Database Operations
+- **Database Design and Implementation**
+- **Advanced Database Operations**
 
-### Phase 1: Database Design and Implementation
+# Phase 1: Database Design and Implementation
 
 Phase 1 is about designing your database and implementing it with initial data and basic features.
 
