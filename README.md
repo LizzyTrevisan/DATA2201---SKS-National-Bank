@@ -37,7 +37,7 @@ LINK BELOW:
 
 
 
-###Database Creation
+## Database Creation
 
 Using the ERD or relational schema, create a database and set of tables. Create an SQL file named “create_database.sql”. This file should perform the following actions:
 
