@@ -20,15 +20,15 @@ Project Overview
 
 Phase 1 is about designing your database and implementing it with initial data and basic features.
 
-###Entity Relationship Diagram
+### Entity Relationship Diagram
 
 Create a well-designed and detailed ERD or relational schema that meets all the requirements of the case study above. The ERD or relational schema should include the following information:
 
-- **Tables with names and attributes
-- **Indications of which columns are primary or foreign keys.
-- **Relationships between tables, including ordinality.
-- **Any special constraints that should be noted.
-- **Check each of the entities for normalization to avoid and eliminate anomalies.
+- **Tables with names and attributes**
+- **Indications of which columns are primary or foreign keys.**
+- **Relationships between tables, including ordinality.**
+- **Any special constraints that should be noted.**
+- **Check each of the entities for normalization to avoid and eliminate anomalies.**
 
 
 LINK BELOW:
