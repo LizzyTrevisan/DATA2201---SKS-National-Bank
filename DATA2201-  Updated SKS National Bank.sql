@@ -51,8 +51,8 @@ CREATE TABLE Employees (
     Last_Name VARCHAR(120) NOT NULL,
     Start_Date DATE DEFAULT GETDATE(),
     Type_ID INT NOT NULL,
-    Address_ID INT NULL,     -- Must be nullable for ON DELETE SET NULL
-    Manager_ID INT NULL      -- Declared but not constrained yet
+    Address_ID INT NULL,     
+    Manager_ID INT NULL     
 );
 
 -- Add foreign keys that reference other tables
@@ -289,6 +289,7 @@ VALUES
 
 -- Checking Accounts
 INSERT INTO CheckingAccount (Account_ID)
+
 VALUES (2), (4), (6), (8), (10);
 
 -- Overdrafts
