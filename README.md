@@ -415,7 +415,7 @@ Prepare relevant queries for your populated database. Create an SQL file named �
 - **Each query includes a comment that describes the purpose of the query.**
 - **Each query has a separate SQL statement that tests the query.**
 
- - [🧮 Prepared Queries]([https://github.com/LizzyTrevisan/DATA2201---SKS-Nation](https://raw.githubusercontent.com/LizzyTrevisan/DATA2201---SKS-National-Bank/refs/heads/main/prepared_queries.sql)
+[🧮 Prepared Queries](https://raw.githubusercontent.com/LizzyTrevisan/DATA2201---SKS-National-Bank/refs/heads/main/prepared_queries.sql)
 
 ```
 USE SKSNationalBank;
