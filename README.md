@@ -51,6 +51,7 @@ Using the ERD or relational schema, create a database and set of tables. Create 
 ## 💾 Database Creation Script – SKS National Bank
 
 Below is the full SQL script that creates the database structure for **SKS National Bank**.
+[📘 DATA2201-  Updated SKS National Bank.sql](https://raw.githubusercontent.com/LizzyTrevisan/DATA2201---SKS-National-Bank/refs/heads/main/DATA2201-%20%20Updated%20SKS%20National%20Bank.sql)
 
 ```sql
 -- 
@@ -230,7 +231,10 @@ GO
 ```
 
 
-##Database Population
+
+## Database Population
+[📊 Data Population Script](https://raw.githubusercontent.com/LizzyTrevisan/DATA2201---SKS-National-Bank/refs/heads/main/DATA2201-%20SKS%20National%20Bank%20Population.sql)
+
 
 With your newly created and empty database, populate it with sample data. Create an SQL file named “populate_database.sql”. This file should perform the following actions:
 
@@ -239,138 +243,115 @@ With your newly created and empty database, populate it with sample data. Create
 - **Use primary keys and foreign keys appropriately.**
 - **The sample data should act as test cases for your prepared queries.**
 
-Populating Database -- 
+
+*Updated Data Population*
+
 ```
-USE SKSNationalBank;
-GO
 
- /* Populating Database*/
- 
-/* ------------
-   BRANCHES
-   These represent different locations across the city.
-   I added slightly different total deposits/loans per branch
-   just to simulate different branch sizes.
---------------*/
-INSERT INTO Branch (Branch_Name, Branch_City, Total_Deposits, Total_Loan)
+-- Addresses for Employees and Customers
+INSERT INTO Address (Street, City, Province, Postal_Code)
 VALUES
- ('Downtown',     'Calgary',  2500000.00, 1200000.00),
- ('Sunridge',     'Calgary',  1500000.00,  800000.00),
- ('Kensington',   'Calgary',  1800000.00,  950000.00),
- ('South Trail',  'Calgary',  2100000.00, 1100000.00),
- ('Shawnessy',    'Calgary',  1300000.00,  600000.00);
+ ('12 7 Ave SE','Calgary','AB','T2G 0J8'),   -- 1
+ ('33 9 Ave SE','Calgary','AB','T2G 1K2'),   -- 2
+ ('4804 130 Ave SE','Calgary','AB','T2Z 4J2'),-- 3
+ ('411 36 St NE','Calgary','AB','T2A 6K3'),  -- 4
+ ('120 Kensington Rd','Calgary','AB','T2N 3P5'),-- 5
+ ('75 Shawville Blvd','Calgary','AB','T2Y 3W5'),-- 6
+ ('101 Riverfront Ave SE','Calgary','AB','T2G 4M9'),-- 7
+ ('2200 36 St NE','Calgary','AB','T1Y 5S3'), -- 8
+ ('15 Kensington Rd NW','Calgary','AB','T2N 3P8'),-- 9
+ ('512 130 Ave SE','Calgary','AB','T2Z 0G4'),-- 10
+ ('88 Shawville Blvd SE','Calgary','AB','T2Y 3W4'),-- 11
+ ('900 6 Ave SW','Calgary','AB','T2P 0V7');  -- 12
 
-/* -----------------------------
-   LOCATIONS 
-   (These are all tied to a Branch_ID)
-------------------------------*/
-INSERT INTO Location (Branch_ID, Location_Name, Location_Address, City, Is_Branch)
+-- Employee Types
+INSERT INTO EmployeeType (Type_Name)
+VALUES ('Personal Banker'),('Loan Officer'),('Teller'),('Branch Manager'),('Back Office');
+
+-- Employees
+INSERT INTO Employees (First_Name, Last_Name, Start_Date, Type_ID, Address_ID, Manager_ID)
 VALUES
- (1,'Downtown Main','100 1 St SE','Calgary', 1),
- (1,'DT Office A',  '200 2 St SE','Calgary', 0),
- (2,'Sunridge Main','2500 36 St NE','Calgary',1),
- (3,'Kensington Main','1120 Kensington Rd NW','Calgary',1),
- (4,'South Trail Main','4300 130 Ave SE','Calgary',1),
- (5,'Shawnessy Main','70 Shawville Blvd SE','Calgary',1),
- (5,'Shawnessy Office','85 Shawville Blvd SE','Calgary',0);
+ ('Avery','Ng','2020-01-15', 4, 1, NULL),       
+ ('Mason','Roy','2021-05-20', 1, 2, 1),
+ ('Jules','Kang','2019-09-03', 2, 3, 1),
+ ('Sam','Lopez','2022-03-12', 3, 4, 2),
+ ('Riley','Chan','2023-06-01', 1, 5, 2),
+ ('Noah','Kahan','2018-11-30', 5, 6, 3);
 
-/* ---------------
-   EMPLOYEES 
-   (as per schema, Manager_ID can be NULL first, then can reference)
-   Manager_ID links employees to their supervisor.
-   First one (Avery) is top-level, others report under.
----------------*/
-INSERT INTO Employees (First_Name, Last_Name, Street, City, Province, Postal_Code, Start_Date, Manager_ID)
+-- Locations
+INSERT INTO Location (Location_Name, Location_Address, City, Is_Branch)
 VALUES
- ('Avery','Ng','12 7 Ave SE','Calgary','AB','T2G 0J8','2020-01-15', NULL),       
- ('Mason','Roy','33 9 Ave SE','Calgary','AB','T2G 1K2','2021-05-20', 1),
- ('Jules','Kang','4804 130 Ave SE','Calgary','AB','T2Z 4J2','2019-09-03', 1),
- ('Sam','Lopez','411 36 St NE','Calgary','AB','T2A 6K3','2022-03-12', 2),
- ('Riley','Chan','120 Kensington Rd','Calgary','AB','T2N 3P5','2023-06-01', 2),
- ('Noah','Kahan','75 Shawville Blvd','Calgary','AB','T2Y 3W5','2018-11-30', 3);
+ ('Downtown Main','100 1 St SE','Calgary', 1),
+ ('DT Office A',  '200 2 St SE','Calgary', 0),
+ ('Sunridge Main','2500 36 St NE','Calgary',1),
+ ('Kensington Main','1120 Kensington Rd NW','Calgary',1),
+ ('South Trail Main','4300 130 Ave SE','Calgary',1),
+ ('Shawnessy Main','70 Shawville Blvd SE','Calgary',1),
+ ('Shawnessy Office','85 Shawville Blvd SE','Calgary',0);
 
-/* -------------------
-   EMPLOYEE LOCATION 
-   This connects which employees work at which branches.
-   Some work at more than one.
-------------------*/
+-- Branches
+INSERT INTO Branch (Branch_Name, Branch_City, Total_Deposits, Total_Loan, Location_ID)
+VALUES
+ ('Downtown',     'Calgary',  2500000.00, 1200000.00, 1),
+ ('Sunridge',     'Calgary',  1500000.00,  800000.00, 3),
+ ('Kensington',   'Calgary',  1800000.00,  950000.00, 4),
+ ('South Trail',  'Calgary',  2100000.00, 1100000.00, 5),
+ ('Shawnessy',    'Calgary',  1300000.00,  600000.00, 6);
+
+-- Employee Location
 INSERT INTO EmployeeLocation (Employee_ID, Location_ID)
 VALUES
  (1,1),(2,1),(2,3),(3,5),(3,6),
  (4,3),(4,2),(5,4),(6,6),(6,7);
 
-/* -----------
-   EMPLOYEE TYPES
-   (Just a few different roles to add variety)
-----------------*/
-INSERT INTO EmployeeType (Type_Name)
-VALUES ('Personal Banker'),('Loan Officer'),('Teller'),('Branch Manager'),('Back Office');
-
-/* ------------
-   HOLDER ROLES 
-   These describe what kind of relationship a person has
-   to an account 
----------------*/
+-- Holder Roles
 INSERT INTO HolderRole (Role_Description)
 VALUES ('Primary'),('Joint'),('Power of Attorney'),('Trustee'),('Authorized Signer');
 
-/* ---------
-   CUSTOMERS 
-------------*/
-INSERT INTO Customer (First_Name, Last_Name, Street, City, Province, Postal_Code)
+-- Customers
+INSERT INTO Customer (Address_ID, First_Name, Last_Name)
 VALUES
- ('Ella','Martinez','101 Riverfront Ave SE','Calgary','AB','T2G 4M9'),
- ('Kai','Williams','2200 36 St NE','Calgary','AB','T1Y 5S3'),
- ('Mila','Kunis','15 Kensington Rd NW','Calgary','AB','T2N 3P8'),
- ('Leo','Brown','512 130 Ave SE','Calgary','AB','T2Z 0G4'),
- ('Zoe','Park','88 Shawville Blvd SE','Calgary','AB','T2Y 3W4'),
- ('Aria','Smith','900 6 Ave SW','Calgary','AB','T2P 0V7');
+ (7, 'Ella', 'Martinez'),
+ (8, 'Kai', 'Williams'),
+ (9, 'Mila', 'Kunis'),
+ (10, 'Leo', 'Brown'),
+ (11, 'Zoe', 'Park'),
+ (12, 'Aria', 'Smith');
 
-/* ---------------------
-   EMPLOYEE and CUSTOMER
------------------------*/
+-- Employee-Customer Relationships
 INSERT INTO EmployeeCustomer (Employee_ID, Customer_ID)
 VALUES
  (2,1),(2,2),(3,3),(4,4),(5,5),(6,6);
 
-/* -----------
-   ACCOUNTS
--------------*/
-INSERT INTO Accounts (Location_ID, Account_Balance, Last_Access_Date)
+-- Accounts (using Branch_IDs)
+INSERT INTO Accounts (Branch_ID, Account_Balance, Last_Access_Date)
 VALUES
  (1,  5200.00, '2025-09-15 10:25'),
- (3,  8450.75, '2025-09-20 14:10'),
- (4, 12500.25, '2025-09-25 09:00'),
- (5,  2300.00, '2025-09-28 16:45'),
- (6,  9800.10, '2025-09-29 11:30'),
- (2,  4100.50, '2025-09-22 13:25'),
- (7,  7600.00, '2025-09-26 08:40'),
- (1,  300.00,  '2025-09-30 17:05'),
- (5,  455.20,  '2025-09-18 12:00'),
- (6,  15750.00,'2025-09-19 15:45');
+ (2,  8450.75, '2025-09-20 14:10'),
+ (3, 12500.25, '2025-09-25 09:00'),
+ (4,  2300.00, '2025-09-28 16:45'),
+ (5,  9800.10, '2025-09-29 11:30'),
+ (1,  4100.50, '2025-09-22 13:25'),
+ (2,  7600.00, '2025-09-26 08:40'),
+ (3,   300.00, '2025-09-30 17:05'),
+ (4,   455.20, '2025-09-18 12:00'),
+ (5, 15750.00, '2025-09-19 15:45');
 
-/* ----------------
-   ACCOUNT HOLDERS 
-   Customers linked to their accounts using Holder IDs.
-   I also decided to make some joint acct, to keep it realistic
------------------*/
--- Assume Account_IDs from 1..10 in the order inserted above
+-- Account Holders
 INSERT INTO AccountHolders (Account_ID, Customer_ID, Holder_ID)
 VALUES
- (1,1,1),                         -- Ella primary
- (2,2,1),                         -- Kai primary
- (3,3,1), (3,4,2),                -- Mila primary, Leo joint
+ (1,1,1),
+ (2,2,1),
+ (3,3,1), (3,4,2),
  (4,4,1),
- (5,5,1), (5,6,2),                -- Zoe primary, Aria joint
- (6,1,2),                         -- Ella joint on a second acct
+ (5,5,1), (5,6,2),
+ (6,1,2),
  (7,2,2),
  (8,6,1),
  (9,3,1),
  (10,5,1);
 
-/* ---------------
-   SAVINGS ACCOUNTS
------------------*/
+-- Savings Accounts
 INSERT INTO SavingsAccount (Account_ID, Interest_Rate)
 VALUES
  (1, 1.25),
@@ -380,24 +361,11 @@ VALUES
  (9, 2.00),
  (10,1.60);
 
-/* -------------------
-   CHECKING ACCOUNTS
-   Note: the Account_ID here also comes from Accounts table.
-   Because of the IDENTITY setup, we have to use IDENTITY_INSERT
-   so SQL lets us pick specific IDs. Otherwise, it would auto-number..
-------------------*/
-SET IDENTITY_INSERT CheckingAccount ON;
-
+-- Checking Accounts
 INSERT INTO CheckingAccount (Account_ID)
-VALUES
- (2), (4), (6), (8), (10);
+VALUES (2), (4), (6), (8), (10);
 
-SET IDENTITY_INSERT CheckingAccount OFF;
-
-/* --------------
-   OVERDRAFTS 
-   (These are tied to checking accounts only)
-------------------*/
+-- Overdrafts
 INSERT INTO Overdraft (Account_ID, Date, Amount, Check_Number)
 VALUES
  (2,'2025-09-10', 125.00, 'CHK-10021'),
@@ -406,9 +374,7 @@ VALUES
  (8,'2025-09-27',  35.50, 'CHK-10144'),
  (10,'2025-09-29', 80.00, 'CHK-10188');
 
-/* -------
-   LOANS
-----------*/
+-- Loans
 INSERT INTO Loan (Branch_ID, Loan_Amount, Start_Date)
 VALUES
  (1, 250000.00,'2024-05-01'),
@@ -417,21 +383,16 @@ VALUES
  (4,  55000.00,'2025-04-05'),
  (5, 120000.00,'2025-06-20');
 
-/* -------------------
-   CUSTOMER and LOANS
---------------------*/
--- Link multiple customers to some loans (joint loans)
+-- Customer Loans
 INSERT INTO CustomerLoans (Loan_ID, Customer_ID)
 VALUES
- (1,1),(1,6),   -- ex. joint mortgage
+ (1,1),(1,6),
  (2,2),
  (3,3),
- (4,4),(4,5),   -- ex. joint car loan
+ (4,4),(4,5),
  (5,5);
 
-/* -------------
-   LOAN PAYMENTS
------------------*/
+-- Loan Payments
 INSERT INTO LoanPayments (Loan_ID, Payment_Date, Amount)
 VALUES
  (1,'2024-06-01',1800.00),
@@ -445,9 +406,6 @@ VALUES
 
 ```
 
-
-
-
 ## Prepared Queries
 
 Prepare relevant queries for your populated database. Create an SQL file named “prepared_queries.sql”. This file should contain 10 queries that meet the following requirements:
@@ -456,6 +414,256 @@ Prepare relevant queries for your populated database. Create an SQL file named �
 - **Each query performs a meaningful action based on the case study.**
 - **Each query includes a comment that describes the purpose of the query.**
 - **Each query has a separate SQL statement that tests the query.**
+
+ - [🧮 Prepared Queries]([https://github.com/LizzyTrevisan/DATA2201---SKS-Nation](https://raw.githubusercontent.com/LizzyTrevisan/DATA2201---SKS-National-Bank/refs/heads/main/prepared_queries.sql)
+
+```
+USE SKSNationalBank;
+GO
+SET NOCOUNT ON;
+GO
+
+/* 1) GetAllBranches
+   Purpose: Quick list of every branch with its deposits and loans.*/
+
+CREATE OR ALTER PROCEDURE dbo.GetAllBranches
+AS
+BEGIN
+    SELECT Branch_ID, Branch_Name, Branch_City, Total_Deposits, Total_Loan
+    FROM dbo.Branch
+    ORDER BY Branch_Name;
+END
+GO
+-- Test
+EXEC dbo.GetAllBranches;
+GO
+
+
+/*  2) GetEmployeeDetails
+   Purpose: For a given employee, show their name, job title,
+            start date, and their manager’s name (if any).*/
+
+CREATE OR ALTER PROCEDURE dbo.GetEmployeeDetails
+    @EmployeeID INT
+AS
+BEGIN
+    SELECT  e.Employee_ID,
+            e.First_Name + ' ' + e.Last_Name AS EmployeeName,
+            et.Type_Name AS JobTitle,
+            e.Start_Date,
+            COALESCE(m.First_Name + ' ' + m.Last_Name, '(no manager)') AS ManagerName
+    FROM dbo.Employees e
+    INNER JOIN dbo.EmployeeType et ON et.Type_ID = e.Type_ID
+    LEFT  JOIN dbo.Employees    m ON m.Employee_ID = e.Manager_ID
+    WHERE e.Employee_ID = @EmployeeID;
+END
+GO
+-- Test
+EXEC dbo.GetEmployeeDetails @EmployeeID = 2;
+GO
+
+
+/* 3) GetCustomersByEmployee
+   Purpose: List all customers served by one employee (advisor).*/
+
+CREATE OR ALTER PROCEDURE dbo.GetCustomersByEmployee
+    @EmployeeID INT
+AS
+BEGIN
+    SELECT c.Customer_ID,
+           c.First_Name + ' ' + c.Last_Name AS CustomerName
+    FROM dbo.EmployeeCustomer ec
+    INNER JOIN dbo.Customer c ON c.Customer_ID = ec.Customer_ID
+    WHERE ec.Employee_ID = @EmployeeID
+    ORDER BY CustomerName;
+END
+GO
+-- Test
+EXEC dbo.GetCustomersByEmployee @EmployeeID = 2;
+GO
+
+
+/* 4) GetCustomerAccountSummary
+   Purpose: For one customer, list all their accounts and balances,
+            then return a simple total across those accounts.*/
+
+CREATE OR ALTER PROCEDURE dbo.GetCustomerAccountSummary
+    @CustomerID INT
+AS
+BEGIN
+    -- List each account the customer is tied to (primary or joint)
+    SELECT ah.Account_ID,
+           a.Branch_ID,
+           a.Account_Balance,
+           a.Last_Access_Date,
+           ah.Holder_ID
+    FROM dbo.AccountHolders ah
+    INNER JOIN dbo.Accounts a ON a.Account_ID = ah.Account_ID
+    WHERE ah.Customer_ID = @CustomerID
+    ORDER BY ah.Account_ID;
+
+    -- Quick total balance across those accounts
+    SELECT SUM(a.Account_Balance) AS TotalBalance
+    FROM dbo.AccountHolders ah
+    INNER JOIN dbo.Accounts a ON a.Account_ID = ah.Account_ID
+    WHERE ah.Customer_ID = @CustomerID;
+END
+GO
+-- Test
+EXEC dbo.GetCustomerAccountSummary @CustomerID = 1;
+GO
+
+
+/*5) GetBranchAccounts
+   Purpose: Show all accounts that belong to a specific branch.*/
+
+CREATE OR ALTER PROCEDURE dbo.GetBranchAccounts
+    @BranchID INT
+AS
+BEGIN
+    SELECT a.Account_ID,
+           b.Branch_Name,
+           a.Account_Balance,
+           a.Last_Access_Date
+    FROM dbo.Accounts a
+    INNER JOIN dbo.Branch b ON b.Branch_ID = a.Branch_ID
+    WHERE a.Branch_ID = @BranchID
+    ORDER BY a.Account_ID;
+END
+GO
+-- Test
+EXEC dbo.GetBranchAccounts @BranchID = 1;
+GO
+
+
+/*6) GetLoanDetails
+   Purpose: For a given loan, show the branch, amount, start date,
+            and the borrower name(s). One row per borrower.*/
+
+CREATE OR ALTER PROCEDURE dbo.GetLoanDetails
+    @LoanID INT
+AS
+BEGIN
+    SELECT  l.Loan_ID,
+            b.Branch_Name,
+            l.Loan_Amount,
+            l.Start_Date,
+            c.Customer_ID,
+            c.First_Name + ' ' + c.Last_Name AS BorrowerName
+    FROM dbo.Loan l
+    INNER JOIN dbo.Branch b         ON b.Branch_ID = l.Branch_ID
+    INNER JOIN dbo.CustomerLoans cl ON cl.Loan_ID  = l.Loan_ID
+    INNER JOIN dbo.Customer c       ON c.Customer_ID = cl.Customer_ID
+    WHERE l.Loan_ID = @LoanID
+    ORDER BY BorrowerName;
+END
+GO
+-- Test
+EXEC dbo.GetLoanDetails @LoanID = 1;
+GO
+
+
+/* 7) GetLoanPayments
+   Purpose: Show the full payment history for a loan,
+            then a quick total paid so far.*/
+
+CREATE OR ALTER PROCEDURE dbo.GetLoanPayments
+    @LoanID INT
+AS
+BEGIN
+    -- Payment list in date order
+    SELECT lp.Payment_No,
+           lp.Payment_Date,
+           lp.Amount
+    FROM dbo.LoanPayments lp
+    WHERE lp.Loan_ID = @LoanID
+    ORDER BY lp.Payment_Date;
+
+    -- Total paid
+    SELECT SUM(lp.Amount) AS TotalPaid
+    FROM dbo.LoanPayments lp
+    WHERE lp.Loan_ID = @LoanID;
+END
+GO
+-- Test
+EXEC dbo.GetLoanPayments @LoanID = 1;
+GO
+
+
+/*8) GetOverdraftHistory
+   Purpose: Show overdraft records for amounts >= a threshold,
+            newest first. Helpful for spotting bigger events.*/
+
+CREATE OR ALTER PROCEDURE dbo.GetOverdraftHistory
+    @MinAmount DECIMAL(18,2)
+AS
+BEGIN
+    SELECT o.Account_ID,
+           o.Date,
+           o.Amount,
+           o.Check_Number
+    FROM dbo.Overdraft o
+    WHERE o.Amount >= @MinAmount
+    ORDER BY o.Date DESC, o.Amount DESC;
+END
+GO
+-- Test
+EXEC dbo.GetOverdraftHistory @MinAmount = 75.00;
+GO
+
+
+/* 9) fn_TotalBalanceForCustomer (Scalar UDF)
+   Purpose: Return a single number = total of all balances
+            across accounts linked to the given customer.*/
+
+CREATE OR ALTER FUNCTION dbo.fn_TotalBalanceForCustomer
+(
+    @CustomerID INT
+)
+RETURNS DECIMAL(18,2)
+AS
+BEGIN
+    DECLARE @total DECIMAL(18,2);
+
+    SELECT @total = SUM(a.Account_Balance)
+    FROM dbo.AccountHolders ah
+    INNER JOIN dbo.Accounts a ON a.Account_ID = ah.Account_ID
+    WHERE ah.Customer_ID = @CustomerID;
+
+    RETURN ISNULL(@total, 0);
+END
+GO
+-- Test
+SELECT dbo.fn_TotalBalanceForCustomer(1) AS TotalForCustomer1;
+GO
+
+
+/* 10) GetBranchPerformanceSummary
+   Purpose: One row per branch with:
+            - Total_Deposits & Total_Loan (stored on Branch)
+            - Avg account balance (computed)
+            - How many accounts the branch has */
+
+CREATE OR ALTER PROCEDURE dbo.GetBranchPerformanceSummary
+AS
+BEGIN
+    SELECT  b.Branch_ID,
+            b.Branch_Name,
+            b.Total_Deposits,
+            b.Total_Loan,
+            AVG(CAST(a.Account_Balance AS DECIMAL(18,2))) AS AvgAccountBalance,
+            COUNT(a.Account_ID)                           AS AccountCount
+    FROM dbo.Branch b
+    LEFT JOIN dbo.Accounts a ON a.Branch_ID = b.Branch_ID
+    GROUP BY b.Branch_ID, b.Branch_Name, b.Total_Deposits, b.Total_Loan
+    ORDER BY b.Branch_Name;
+END
+GO
+-- Test
+EXEC dbo.GetBranchPerformanceSummary;
+GO
+
+```
 
   
 ## 🛠️ Submission Instructions
