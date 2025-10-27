@@ -33,7 +33,7 @@ Create a well-designed and detailed ERD or relational schema that meets all the 
 LINK BELOW: </br>
 (https://lucid.app/lucidchart/9110e2ea-a1a2-460c-b788-3334b2fe15ab/edit?viewport_loc=563%2C-4955%2C5982%2C2968%2C0_0&invitationId=inv_528b72bf-e646-4658-a96c-45496d095986)
 
-![DATA2201- SKS National Bank.png](https://raw.githubusercontent.com/LizzyTrevisan/DATA2201---SKS-National-Bank/refs/heads/main/DATA2201-%20%20SKS%20National%20Bank.png)
+![DATA2201- SKS National Bank.png](https://raw.githubusercontent.com/LizzyTrevisan/DATA2201---SKS-National-Bank/refs/heads/main/Final%20version%20ERD.%20for%20DATA2201-%20%20SKS%20National%20Bank.jpeg)
 
 
 
