@@ -51,7 +51,6 @@ Using the ERD or relational schema, create a database and set of tables. Create 
 ## 💾 Database Creation Script – SKS National Bank
 
 Below is the full SQL script that creates the database structure for **SKS National Bank**.
-[📘 DATA2201-  Updated SKS National Bank.sql](https://raw.githubusercontent.com/LizzyTrevisan/DATA2201---SKS-National-Bank/refs/heads/main/DATA2201-%20%20Updated%20SKS%20National%20Bank.sql)
 
 ```sql
 -- 
@@ -233,8 +232,6 @@ GO
 
 
 ## Database Population
-[📊 Data Population Script](https://raw.githubusercontent.com/LizzyTrevisan/DATA2201---SKS-National-Bank/refs/heads/main/DATA2201-%20SKS%20National%20Bank%20Population.sql)
-
 
 With your newly created and empty database, populate it with sample data. Create an SQL file named “populate_database.sql”. This file should perform the following actions:
 
