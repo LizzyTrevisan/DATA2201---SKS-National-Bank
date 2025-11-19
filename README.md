@@ -701,8 +701,9 @@ Phase 2 is about implementing advanced database operations onto the database you
 
 - **Provide SQL statements that test the enforcement of the privileges on the two users created above.**
 
-  ```
-  USE MASTER;
+```
+
+USE MASTER;
 
 GO
 
@@ -719,7 +720,7 @@ GO
 
 
 CREATE LOGIN customer_group_L
-	WITH PASSWORD='customer',
+	WITH PASSWORD = 'customer',
 	DEFAULT_DATABASE=SKSNationalBank,
 	CHECK_EXPIRATION= ON,
 	CHECK_POLICY= ON;
@@ -729,7 +730,7 @@ USE SKSNationalBank;
 GO
 
 IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'customer_group_L')
-	DROP LOGIN customer_group_L;
+	DROP USER customer_group_L;
 GO
 
 CREATE USER customer_group_L FOR LOGIN customer_group_L;
@@ -745,6 +746,7 @@ GRANT SELECT ON dbo.CustomerLoans TO customer_group_L;
 GRANT SELECT ON dbo.Loan TO customer_group_L;
 GRANT SELECT ON dbo.LoanPayments TO customer_group_L;
 GRANT SELECT ON dbo.Overdraft TO customer_group_L;
+GO
 
 /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -752,13 +754,14 @@ GRANT SELECT ON dbo.Overdraft TO customer_group_L;
 /* 2. Create a login and user named “accountant_group_[?]” where [?] is your group letter. 
 (For example, “accountant_group_B”.)
 - Their password should be “accountant”.*/
-
-
-IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'accountant_group_L')
-DROP LOGIN account_group_L;
+USE master;
 GO
 
-CREATE LOGIN account_group_L
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'accountant_group_L')
+DROP LOGIN accountant_group_L;
+GO
+
+CREATE LOGIN accountant_group_L
 	WITH PASSWORD='accountant',
 	DEFAULT_DATABASE=SKSNationalBank,
 	CHECK_EXPIRATION= ON,
@@ -841,11 +844,8 @@ VALUES ('Street 12345', 'Calgary', 'AB', 'T2T 1T1');
 REVERT;
 GO
 
+```
 
-
-
-
-  ```
 
 ## Triggers
 
