@@ -729,7 +729,7 @@ GO
 USE SKSNationalBank;
 GO
 
-IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'customer_group_L')
+IF EXISTS (SELECT 1 FROM sys.database_principals WHERE name = 'customer_group_L')
 	DROP USER customer_group_L;
 GO
 
@@ -746,6 +746,8 @@ GRANT SELECT ON dbo.CustomerLoans TO customer_group_L;
 GRANT SELECT ON dbo.Loan TO customer_group_L;
 GRANT SELECT ON dbo.LoanPayments TO customer_group_L;
 GRANT SELECT ON dbo.Overdraft TO customer_group_L;
+GRANT SELECT ON dbo.SavingsAccount TO customer_group_L;
+GRANT SELECT ON dbo.CheckingAccount TO customer_group_L;
 GO
 
 /*----------------------------------------------------------------------------------------------------------------*/
@@ -771,7 +773,7 @@ GO
 USE SKSNationalBank;
 GO
 
-IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'accountant_group_L')
+IF EXISTS (SELECT 1 FROM sys.database_principals WHERE name = 'accountant_group_L')
 	DROP LOGIN accountant_group_L;
 GO
 
@@ -787,15 +789,30 @@ payments and loans, based on your ERD.
 Those permissions should be revoked.
 */
 
-GRANT SELECT, INSERT, UPDATE, DELETE
+GRANT SELECT
 ON SCHEMA::dbo
 TO accountant_group_L;
 GO
 
+GRANT INSERT, UPDATE, DELETE ON dbo.Location FROM accountant_group_L;
+GRANT INSERT, UPDATE, DELETE ON dbo.Branch FROM accountant_group_L;
+GRANT INSERT, UPDATE, DELETE ON dbo.Address FROM accountant_group_L;
+GRANT INSERT, UPDATE, DELETE ON dbo.EmployeeType FROM accountant_group_L;
+GRANT INSERT, UPDATE, DELETE ON dbo.Employees FROM accountant_group_L;
+GRANT INSERT, UPDATE, DELETE ON dbo.HolderRole FROM accountant_group_L;
+GRANT INSERT, UPDATE, DELETE ON dbo.Customer FROM accountant_group_L;
+GRANT INSERT, UPDATE, DELETE ON dbo.EmployeeCustomer FROM accountant_group_L;
+
+
+
 
 REVOKE INSERT, UPDATE, DELETE ON dbo.Accounts FROM accountant_group_L;
+REVOKE INSERT, UPDATE, DELETE ON dbo.AccountHolders FROM accountant_group_L;
+REVOKE INSERT, UPDATE, DELETE ON dbo.SavingsAccount FROM accountant_group_L;
+REVOKE INSERT, UPDATE, DELETE ON dbo.CheckingAccount FROM accountant_group_L;
 REVOKE INSERT, UPDATE, DELETE ON dbo.Loan FROM accountant_group_L;
 REVOKE INSERT, UPDATE, DELETE ON dbo.LoanPayments FROM accountant_group_L;
+REVOKE INSERT, UPDATE, DELETE ON dbo.CustomerLoans FROM accountant_group_L;
 REVOKE INSERT, UPDATE, DELETE ON dbo.Overdraft FROM accountant_group_L;
 
 /* - Provide SQL statements that test the enforcement of the privileges on the two users created above.*/
@@ -806,15 +823,16 @@ WHERE SELECT SHOULD BE OK*/
 PRINT 'Testing customer_group_L';
 EXECUTE AS USER = 'customer_group_L';
 
-SELECT TOP 3 * FROM dbo.Customer;
+SELECT * FROM dbo.Customer;
 
 /*AND INSERT SHOULD FAIL.*/ 
 	BEGIN TRY
 		INSERT INTO dbo.Customer (Address_ID, First_Name, Last_Name)
 		VALUES (NULL, 'Testing', 'Customer');
+		PRINT 'Error: insertion not succeeded.';
 	END TRY
 	BEGIN CATCH
-		PRINT 'Insertion Failed, customer_group_L has no authorization to Insert data' + 
+		PRINT 'Insertion Failed, customer_group_L has no authorization to Insert data. ' + 
 		ERROR_MESSAGE();
 	END CATCH
 REVERT;
@@ -822,27 +840,33 @@ GO
 
 /*ACCOUNTANT*/
 
-PRINT 'Testing account_group_L';
+PRINT 'Testing accountant_group_L';
 EXECUTE AS USER = 'accountant_group_L';
 
 /* SELECT STATEMENTS SHOUDLD WORK*/
-SELECT TOP 3 * FROM dbo.Employees;
+SELECT * FROM dbo.Employees;
 
 /*INSERT allowed on Address Table:*/ 
-INSERT INTO dbo.Address (Street, City, Province, Postal_Code)
-VALUES ('Street 12345', 'Calgary', 'AB', 'T2T 1T1');
+	BEGIN TRY
+		INSERT INTO dbo.Address (Street, City, Province, Postal_Code)
+		VALUES ('Street 12345', 'Calgary', 'AB', 'T2T 1T1');
+		PRINT 'Insertion succeeded.';
+	END TRY
+	BEGIN CATCH
+		PRINT ' Error: not allowed. ' + 
+		ERROR_MESSAGE();
+	END CATCH;
 
 /*INSERT into Accounts NOT allowed:*/
 	BEGIN TRY
 		INSERT INTO dbo.Accounts (Branch_ID, Account_Balance, Last_Access_Date)
 		VALUES (1, 2999.99, GETDATE());
+		PRINT 'Error: insertion not succeeded.';
 	END TRY
 	BEGIN CATCH
-		PRINT 'Insertion not allowed into Accounts by account_group_L' +
-		ERROR_MESSAGE();
+		PRINT 'Insertion not allowed into Accounts by account_group_L. ' + ERROR_MESSAGE();
 	END CATCH;
 REVERT;
-GO
 
 ```
 
